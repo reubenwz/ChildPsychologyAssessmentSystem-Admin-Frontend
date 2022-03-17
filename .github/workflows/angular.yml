@@ -1,0 +1,23 @@
+name: Angular
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  angular-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Install dependencies
+        run: npm install
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli > /dev/null
+      - name: Compile resources
+        run: ng build --prod --output-path=dist

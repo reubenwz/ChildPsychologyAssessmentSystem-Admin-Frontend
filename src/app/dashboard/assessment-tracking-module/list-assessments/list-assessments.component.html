@@ -1,0 +1,105 @@
+<div class="grid justify-content-center">
+  <div class="col-12">
+    <p-card *ngIf="assessmentTrackingService.assessments$ | async as assessments">
+      <p-table
+        [value]="assessments"
+        [rows]="30"
+        [paginator]="true"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        dataKey="assessmentId"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="assessmentUniqueId">
+              Assessment Unique ID
+              <p-sortIcon field="assessmentUniqueId"></p-sortIcon>
+            </th>
+            <th pSortableColumn="assessmentDate">
+              Assessment Date
+              <p-sortIcon field="assessmentDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="approvedDate">
+              Approved Date
+              <p-sortIcon field="approvedDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">
+              Status
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="reason">
+              Reason
+              <p-sortIcon field="reason"></p-sortIcon>
+            </th>
+            <th pSortableColumn="loc">
+              LOC
+              <p-sortIcon field="loc"></p-sortIcon>
+            </th>
+            <th pSortableColumn="client.name">
+              Client
+              <p-sortIcon field="client.name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="assessor.name">
+              Assessor
+              <p-sortIcon field="assessor.name"></p-sortIcon>
+            </th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="assessmentUniqueId"></p-columnFilter>
+            </th>
+            <th></th>
+            <th></th>
+            <th>
+              <p-columnFilter type="text" field="status"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="reason"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="loc"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="client.name"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="assessor.name"></p-columnFilter>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assessment>
+          <tr>
+            <td>{{ assessment.assessmentUniqueId }}</td>
+            <td>{{ assessment.assessmentDate | date }}</td>
+            <td>{{assessment.approvedDate ? (assessment.approvedDate | date) : 'No Approved Date'}}</td>
+            <td>{{assessment.status ? assessment.status : 'No Status Available'}}</td>
+            <td>{{assessment.reason ? assessment.reason : 'No Reason Available'}}</td>
+            <td>{{assessment.loc ? assessment.loc : 'No LOC Available'}}</td>
+            <td>{{ assessment.client.name }}</td>
+            <td>{{ assessment.assessor.name }}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                label="View Assessment"
+                icon="pi pi-user-edit"
+                class="p-button-help p-button-rounded"
+                routerLink="/dashboard/assessments/{{assessment.assessmentId}}"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            In total there are
+            {{ assessments ? assessments.length : 0 }} assessments.
+          </div>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

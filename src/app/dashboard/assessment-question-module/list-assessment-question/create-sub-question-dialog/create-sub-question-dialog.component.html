@@ -1,0 +1,67 @@
+<div class="grid">
+  <div class="col-12" *ngIf="createSubQuestionForm$ | async as createSubQuestionForm">
+    <form [formGroup]="createSubQuestionForm" (submit)="createSubQuestion()">
+      <div class="p-datatable-gridlines p-datatable p-component p-datatable-responsive-scroll">
+        <table role="table" class="p-datatable-table ng-star-inserted">
+          <tbody class="p-element p-datatable-tbody">
+          <tr class="ng-star-inserted">
+            <td>Question Code</td>
+            <td class="p-fluid">
+              <input pInputText formControlName="questionCode"/>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Title</td>
+            <td class="p-fluid">
+              <input pInputText formControlName="questionTitle"/>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Description</td>
+            <td class="p-fluid">
+              <ng-container formArrayName="questionDescription">
+                <div class="p-inputgroup" *ngFor="let _ of questionDescription.controls; index as i">
+                  <button pButton type="button" icon="pi pi-minus"
+                          class="p-inputgroup-addon p-button-outlined p-button-danger"
+                          (click)="removeQuestionDescription(i)"></button>
+                  <textarea pInputTextarea [formControlName]="i"></textarea>
+                  <button pButton type="button" icon="pi pi-plus" class="p-inputgroup-addon p-button-outlined"
+                          (click)="addQuestionDescription()"></button>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Question to Consider</td>
+            <td class="p-fluid">
+              <ng-container formArrayName="questionToConsider">
+                <div class="p-inputgroup" *ngFor="let _ of questionToConsider.controls; index as i">
+                  <button pButton type="button" icon="pi pi-minus"
+                          class="p-inputgroup-addon p-button-outlined p-button-danger"
+                          (click)="removeQuestionToConsider(i)"></button>
+                  <textarea pInputTextarea [formControlName]="i"></textarea>
+                  <button pButton type="button" icon="pi pi-plus" class="p-inputgroup-addon p-button-outlined"
+                          (click)="addQuestionToConsider()"></button>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Ratings Definition</td>
+            <td class="p-fluid">
+              <div class="p-inputgroup" *ngFor="let ratingDefinition of this.SCORE_RANGE">
+                <span class="p-inputgroup-addon">{{ratingDefinition}}</span>
+                <input type="text" pInputText [formControlName]="'ratingsDefinition' + ratingDefinition"/>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="p-datatable-footer ng-star-inserted">
+          <button pButton label="Create Sub Question" type="submit"
+                  [disabled]="createSubQuestionForm.invalid || (applicationStateService.isProcessing$ | async)"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<form novalidate [formGroup]="updateProfileForm" (submit)="updateProfile()">
+  <div class="grid">
+    <div class="col-12">
+      <div class="grid">
+        <div class="col-12 lg:col-6 md:col-6">
+          <div class="grid">
+            <div *ngIf="adminUser$ | async as adminUser">
+              <div class="col-12">
+                <h1>{{adminUser.name}}</h1>
+              </div>
+              <div class="col-12">
+                <p>{{adminUser.dob | date}}</p>
+              </div>
+              <div class="col-12">
+                <p>{{adminUser.gender}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 lg:col-6 md:col-6">
+          <div class="grid">
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                <input pInputText placeholder="Name" type="text" formControlName="name"/>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-inputgroup p-fluid">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+                <p-calendar placeholder="Date of Birth" formControlName="dob"></p-calendar>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-fluid" *ngIf="gendersService.genders$ | async as genders">
+                <p-dropdown placeholder="Gender" [options]="genders" formControlName="gender"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <button pButton type="submit"
+                        [disabled]="updateProfileForm.invalid || (this.applicationStateService.isProcessing$ | async)">
+                  Update
+                  Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,106 @@
+<p-card>
+  <div class="grid">
+    <div class="col-12">
+      <p-messages [(value)]="messages" [enableService]="false"></p-messages>
+      <p-messages
+        *ngIf="clientAssessmentService.errorMessage$ | async as errMsg"
+        >{{ errMsg }}</p-messages
+      >
+      <div *ngIf="dashboardPresentationService.presentationMode$ | async">
+        <h1>Client Assessment Assessors Bubblechart</h1>
+      </div>
+
+      <div [hidden]="dashboardPresentationService.presentationMode$ | async">
+        <div class="grid">
+          <h1>Client Assessment Assessors Bubblechart</h1>
+          <button
+            pButton
+            icon="pi pi-info"
+            class="p-button-rounded"
+            pTooltip="This bar chart displays, in a bubble shape, the corresponding number of assessments for each organisation. The greater the number of assessments done for clients of a particular assessment, the bigger the bubble.
+            **Click on Legend title to remove Organisation Bubble**"
+            style="width: 25px; height: 25px"
+          ></button>
+        </div>
+      </div>
+
+      <form
+        [formGroup]="clientAssessmentFormGroup"
+        novalidate
+        *ngIf="
+          (dashboardPresentationService.presentationMode$ | async) === false
+        "
+      >
+        <div class="grid">
+          <!-- Start Date Input with p-calendar -->
+          <div class="lg:col-4 md:col-6 sm:col-12">
+            <div class="p-inputgroup p-fluid">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <span class="p-float-label">
+                <p-calendar
+                  inputId="startDate"
+                  formControlName="startDate"
+                  [maxDate]="clientAssessmentFormGroup.get('endDate')?.value"
+                  dateFormat="dd/mm/yy"
+                  (onInput)="updateInformationSelection()"
+                  (onSelect)="updateInformationSelection()"
+                ></p-calendar>
+                <label for="startDate">Start Date</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish Start Date Input with p-calendar -->
+
+          <!-- End Date Input with p-calendar -->
+          <div class="lg:col-4 md:col-6 sm:col-12">
+            <div class="p-inputgroup p-fluid">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <span class="p-float-label">
+                <label for="endDate">End Date</label>
+                <p-calendar
+                  placeholder="End Date"
+                  inputId="endDate"
+                  formControlName="endDate"
+                  [minDate]="clientAssessmentFormGroup.get('startDate')?.value"
+                  dateFormat="dd/mm/yy"
+                  (onInput)="updateInformationSelection()"
+                  (onSelect)="updateInformationSelection()"
+                ></p-calendar>
+                <label for="endDate">End Date</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish End Date Input with p-calendar -->
+        </div>
+      </form>
+
+      <div class="col-12">
+        <div
+          *ngIf="
+            clientAssessmentService.orgBubblechartDisplayData$
+              | async as clientAssessmentData
+          "
+        >
+          <div
+            *ngIf="
+              clientAssessmentService.orgBubblechartOptions$
+                | async as clientAssessmentOptions
+            "
+          >
+            <canvas
+              baseChart
+              [data]="clientAssessmentData"
+              [options]="clientAssessmentOptions"
+              [type]="'bubble'"
+              style="height: 400px"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

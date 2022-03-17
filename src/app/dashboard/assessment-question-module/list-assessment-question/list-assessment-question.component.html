@@ -1,0 +1,93 @@
+<div class="grid justify-content-center">
+  <div class="col-12">
+    <!-- p-table loaded to fix the display styles -->
+    <p-table [hidden]="true"></p-table>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-card *ngIf="assessmentQuestionService.assessmentQuestionTreeNodes$ | async as assessmentQuestionTreeNodes">
+      <p-toolbar>
+        <ng-template pTemplate="left">
+          <button pButton pRipple (click)="openCreateDomainDialog()" label="Add Domain" icon="pi pi-plus"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <button pButton pRipple type="button" label="Submit Changes" (click)="assessmentQuestionService.submitDraft()"
+                  icon="pi pi-plus"
+                  [disabled]="(assessmentQuestionService.draftExistence$ | async) === false || (applicationStateService.isProcessing$ | async)"></button>
+        </ng-template>
+      </p-toolbar>
+      <p-treeTable [value]="assessmentQuestionTreeNodes">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-node="node" let-rowData="rowData">
+          <tr *ngIf="rowData.domainName" class="bg-gray-300">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.domainName}}
+            </td>
+            <td>Domain</td>
+            <td>
+              <button pButton pRipple (click)="openViewDomainDialog(rowData)"
+                      label="View Domain"></button>
+              <button pButton pRipple (click)="openCreateAgeGroupDialog(rowData)"
+                      label="Add Age Group"></button>
+            </td>
+          </tr>
+          <tr *ngIf="isAgeGroup(node)" class="bg-gray-200">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.ageRange}}
+            </td>
+            <td>Age Group</td>
+            <td>
+              <button pButton pRipple (click)="openViewAgeGroupDialog(rowData)"
+                      label="View Age Group"></button>
+              <button pButton pRipple (click)="openCreateMainQuestionDialog(rowData)"
+                      label="Add Main Question"></button>
+            </td>
+          </tr>
+          <tr *ngIf="isMainQuestion(node)" class="bg-gray-100">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.questionTitle}} ({{rowData.questionCode}})
+            </td>
+            <td>Main Question</td>
+            <td>
+              <button pButton pRipple (click)="openViewMainQuestionDialog(rowData)"
+                      label="View Main Question"></button>
+              <button pButton pRipple (click)="openCreateSubModuleDialog(rowData)"
+                      label="Add Sub Module" [disabled]="rowData.subModule"></button>
+            </td>
+          </tr>
+          <tr *ngIf="isSubModule(node)" class="bg-gray-50">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.subModuleName}}
+            </td>
+            <td>Sub Module</td>
+            <td>
+              <button pButton pRipple (click)="openViewSubModuleDialog(rowData)"
+                      label="View Sub Module"></button>
+              <button pButton pRipple (click)="openCreateSubQuestionDialog(rowData)"
+                      label="Add Sub Question"></button>
+            </td>
+          </tr>
+          <tr *ngIf="isSubQuestion(node)">
+            <td>
+              <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+              {{rowData.questionTitle}} ({{rowData.questionCode}})
+            </td>
+            <td>Sub Question</td>
+            <td>
+              <button pButton pRipple (click)="openViewSubQuestionDialog(rowData)"
+                      label="View Sub Question"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-treeTable>
+    </p-card>
+  </div>
+</div>

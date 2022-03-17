@@ -1,0 +1,68 @@
+<div class="col-12" *ngIf="(assessmentTrackingService.specificAssessment$ | async) as assessment">
+  <p-card>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Assessment Details</h2>
+      </div>
+      <div class="col-12" *ngIf="updateAssessmentForm">
+        <form (submit)="updateAssessment()" [formGroup]="updateAssessmentForm">
+          <div class="p-datatable-gridlines p-datatable p-component p-datatable-responsive-scroll">
+            <table role="table" class="p-datatable-table ng-star-inserted">
+              <tbody class="p-element p-datatable-tbody">
+              <tr class="ng-star-inserted">
+                <td>Assessment Unique ID</td>
+                <td class="p-fluid">
+                  {{assessment.assessmentUniqueId}}
+                </td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Assessment Date</td>
+                <td>
+                  {{assessment.assessmentDate | date}}
+                </td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Status</td>
+                <td class="p-fluid" *ngIf="viewSpecificAssessmentService.statusList$ | async as statusList">
+                  <p-dropdown placeholder="Assigned Status" [options]="statusList"
+                              formControlName="status"></p-dropdown>
+                </td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Reason</td>
+                <td class="p-fluid">
+                  {{assessment.reason ? assessment.reason : 'No Reason Available'}}
+                </td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Approved Date</td>
+                <td>{{assessment.approvedDate ? (assessment.approvedDate | date) : 'No Approved Date'}}</td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>LOC</td>
+                <td class="p-fluid">{{assessment.loc ? assessment.loc : 'No LOC Available'}}</td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Client Name</td>
+                <td>{{ assessment.client.name }}</td>
+              </tr>
+              <tr class="ng-star-inserted">
+                <td>Assessor Name</td>
+                <td>{{ assessment.assessor.name }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="p-datatable-footer ng-star-inserted">
+              <button pButton label="Update Assessment" type="submit"
+                      [disabled]="(applicationStateService.isProcessing$ | async) || updateAssessmentForm.invalid"></button>
+              <button pButton label="Cancel" type="button"
+                      class="p-button-danger"
+                      (click)="viewSpecificAssessmentService.disableEditing()"
+                      [disabled]="(applicationStateService.isProcessing$ | async)"></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </p-card>
+</div>

@@ -1,0 +1,53 @@
+<form [formGroup]="dataUploadSearchForm" novalidate (submit)="doSearch()">
+  <div class="grid">
+    <div class="col-12">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-calendar"></i>
+        </span>
+        <p-calendar placeholder="Upload Date" inputId="uploadDate" formControlName="uploadDate"></p-calendar>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon"><i class="pi pi-file"></i></span>
+        <input
+          type="text"
+          pInputText
+          placeholder="Document Details"
+          formControlName="docDetails"
+        />
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+        <input
+          type="text"
+          pInputText
+          placeholder="Uploader Name"
+          formControlName="adminName"
+        />
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-inputgroup">
+        <button pButton
+                label="Search"
+                [disabled]="dataUploadSearchForm.invalid"
+                type="submit">
+        </button>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="p-inputgroup justify-content-end">
+        <button pButton
+                class="p-button-danger"
+                label="Reset search"
+                type="button"
+                (click)="resetSearch()">
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

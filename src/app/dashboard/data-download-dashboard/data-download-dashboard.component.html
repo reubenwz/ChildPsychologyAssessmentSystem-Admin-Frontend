@@ -1,0 +1,61 @@
+<div class="grid justify-content-center">
+  <div
+    class="
+      lg:col-10
+      md:col-12
+      sm:col-offset-0 sm:col-12
+    ">
+    <form id="reset-form" [formGroup]="dataDownloadForm" novalidate
+          (submit)="initiateDownload()">
+      <p-card>
+        <div class="grid">
+          <div class="col-12">
+            <h1>Data Download</h1>
+            <p>Select a start and end date period which you would like to generate a download for. Thereafter, hit
+              the "Create Download" button and then press the "Start Download" button to begin downloading the
+              generated spreadsheet.</p>
+          </div>
+          <div class="lg:col-6 md:col-6 sm:col-12">
+            <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+              <span class="p-float-label">
+              <p-calendar placeholder="Start Date" inputId="start_date" formControlName="start_date"
+                          [maxDate]="dataDownloadForm.get('end_date')?.value"></p-calendar>
+              <label for="start_date">Start Date</label>
+            </span>
+            </div>
+          </div>
+          <div class="lg:col-6 md:col-6 sm:col-12">
+            <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+              <span class="p-float-label">
+              <p-calendar placeholder="End Date" inputId="end_date" formControlName="end_date"
+                          [minDate]="dataDownloadForm.get('start_date')?.value"></p-calendar>
+              <label for="end_date">End Date</label>
+            </span>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="p-inputgroup">
+              <button pButton
+                      class="full-width-button"
+                      label="Create Download"
+                      [disabled]="dataDownloadForm.invalid || (applicationStateService.isProcessing$ | async)"
+                      type="submit">
+              </button>
+            </div>
+          </div>
+          <div class="col-12">
+            <a class="full-width-button" pButton [href]="(downloadUrl$ | async)" download="download.xlsx"
+               [ngClass]="{'p-disabled': (downloadUrl$ | async) === null}"
+               label="Start Download"></a>
+          </div>
+        </div>
+      </p-card>
+    </form>
+  </div>
+</div>

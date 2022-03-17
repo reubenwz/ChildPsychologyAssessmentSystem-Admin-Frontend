@@ -1,0 +1,7 @@
+<div class="grid justify-content-center">
+  <app-assessment-details *ngIf="(viewSpecificAssessmentService.editMode$ | async) === false"></app-assessment-details>
+  <app-update-assessment-details
+    *ngIf="viewSpecificAssessmentService.editMode$ | async"></app-update-assessment-details>
+  <app-assessment-result></app-assessment-result>
+  <app-caregiver-assessment-result></app-caregiver-assessment-result>
+</div>

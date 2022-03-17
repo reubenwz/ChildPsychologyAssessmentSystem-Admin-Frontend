@@ -1,0 +1,21 @@
+<div
+  *ngIf="
+    dashboardTopneedsBarchartResponseService.topNeedsBarChartDisplayData$
+      | async as topNeedsBarChartDisplayData
+  "
+>
+  <div
+    *ngIf="
+      dashboardTopneedsBarchartResponseService.topNeedsBarChartOptions$
+        | async as topNeedsBarChartOptions
+    "
+  >
+    <canvas
+      baseChart
+      [data]="topNeedsBarChartDisplayData"
+      [options]="topNeedsBarChartOptions"
+      [type]="'bar'"
+    >
+    </canvas>
+  </div>
+</div>

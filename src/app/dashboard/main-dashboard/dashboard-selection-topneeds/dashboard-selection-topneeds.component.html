@@ -1,0 +1,92 @@
+<form [formGroup]="dashboardSelectionForm" novalidate>
+  <p-card>
+    <div class="grid">
+      <div class="col-12">
+        <p-messages
+          severity="error"
+          *ngIf="dashboardChartsService.errorMessage$ | async as errorMessage"
+        >
+          <ng-template pTemplate>
+            <span class="custom-message">{{ errorMessage }}</span>
+          </ng-template>
+        </p-messages>
+        <h1>Top needs</h1>
+      </div>
+      <div class="col-12">
+        <div class="p-inputgroup p-fluid">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+          <span class="p-float-label">
+              <p-calendar
+                placeholder="Start Date"
+                inputId="start_date"
+                formControlName="start_date"
+                [maxDate]="dashboardSelectionForm.get('end_date')?.value"
+                (onInput)="updateInformationSelection()"
+                (onSelect)="updateInformationSelection()"
+              ></p-calendar>
+              <label for="start_date">Start Date</label>
+            </span>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="p-inputgroup p-fluid">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-calendar"></i>
+            </span>
+          <span class="p-float-label">
+              <p-calendar
+                placeholder="End Date"
+                inputId="end_date"
+                formControlName="end_date"
+                [minDate]="dashboardSelectionForm.get('start_date')?.value"
+                (onInput)="updateInformationSelection()"
+                (onSelect)="updateInformationSelection()"
+              ></p-calendar>
+              <label for="end_date">End Date</label>
+            </span>
+        </div>
+      </div>
+      <div class="col-12" *ngIf="dashboardChartsService.ageGroups$ | async as ageGroups">
+        <div class="p-fluid">
+          <span class="p-float-label">
+          <p-dropdown
+            placeholder="Age Group"
+            inputId="age_group"
+            [options]="ageGroups"
+            formControlName="age_group"
+            optionLabel="individualRange"
+            optionValue="individualRangeCode"
+            (onChange)="updateInformationSelection()"
+          ></p-dropdown>
+          <label for="age_group">Age Group</label>
+            </span>
+        </div>
+      </div>
+      <div
+        class="col-12"
+        *ngIf="
+          dashboardChartsService.organisationNames$ | async as organisationNames
+        "
+      >
+        <div class="p-fluid">
+          <span class="p-float-label">
+            <p-multiSelect inputId="organisation_name" [options]="organisationNames"
+                           optionLabel="name"
+                           optionValue="nameCode"
+                           formControlName="organisation_name"
+                           (onChange)="updateInformationSelection()">
+                </p-multiSelect>
+            <label for="organisation_name">Select Organisation</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12 lg:col-6 md:col-12">
+        <app-topneeds-barchart-response-domain></app-topneeds-barchart-response-domain>
+      </div>
+    </div>
+  </p-card>
+</form>

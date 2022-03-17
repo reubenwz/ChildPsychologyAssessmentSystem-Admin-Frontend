@@ -1,0 +1,122 @@
+<div
+  class="grid justify-content-center"
+  [ngClass]="{
+        'presentation-mode':
+          (dashboardPresentationService.presentationMode$ | async)
+      }"
+>
+  <div class="col-12">
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <button
+          pButton
+          pRipple
+          (click)="printCharts()"
+          label="Export to PDF"
+          [loading]="(applicationStateService.isProcessing$ | async) === true"
+          icon="pi pi-print"
+          loadingIcon="pi pi-spin pi-spinner"
+          *ngIf="
+          (dashboardPresentationService.presentationMode$ | async) === false
+        "
+        ></button>
+        <button
+          pButton
+          pRipple
+          (click)="dashboardPresentationService.goPrevious()"
+          icon="pi pi-arrow-left"
+          class="p-button-outlined"
+          *ngIf="dashboardPresentationService.presentationMode$ | async"
+          [disabled]="
+                (dashboardPresentationService.canNavigatePrevious$ | async) ===
+                false
+              "
+        ></button>
+        <button
+          pButton
+          pRipple
+          (click)="dashboardPresentationService.goPresent()"
+          label="Present"
+          icon="pi pi-briefcase"
+          class="p-button-success"
+          *ngIf="
+                (dashboardPresentationService.presentationMode$ | async) ===
+                false
+              "
+        ></button>
+        <button
+          pButton
+          pRipple
+          (click)="dashboardPresentationService.exitPresent()"
+          class="p-button-warning p-button-outlined"
+          icon="pi pi-ban"
+          label="Exit Presentation"
+          *ngIf="dashboardPresentationService.presentationMode$ | async"
+        ></button>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <button
+          pButton
+          pRipple
+          (click)="dashboardPresentationService.goNext()"
+          class="p-button-outlined"
+          icon="pi pi-arrow-right"
+          *ngIf="dashboardPresentationService.presentationMode$ | async"
+          [disabled]="
+                (dashboardPresentationService.canNavigateNext$ | async) ===
+                false
+              "
+        ></button>
+      </ng-template>
+    </p-toolbar>
+  </div>
+
+  <div
+    class="col-12 xl:col-4 lg:col-4 md:col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(1)"
+  >
+    <app-age-piechart></app-age-piechart>
+  </div>
+  <div
+    class="col-12 xl:col-4 lg:col-4 md:col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(1)"
+  >
+    <app-race-piechart></app-race-piechart>
+  </div>
+  <div
+    class="col-12 xl:col-4 lg:col-4 md:col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(1)"
+  >
+    <app-gender-piechart></app-gender-piechart>
+  </div>
+  <div
+    class="col-12 xl:col-12 lg:col-8 md:col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(2)"
+  >
+    <app-average-response-domain></app-average-response-domain>
+  </div>
+  <div
+    class="col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(3)"
+  >
+    <app-client-assessment></app-client-assessment>
+  </div>
+  <div
+    class="col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(4)"
+  >
+    <app-topstrength-topneeds></app-topstrength-topneeds>
+  </div>
+  <div
+    class="col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(5)"
+  >
+    <app-toptrauma-traumapercentage></app-toptrauma-traumapercentage>
+  </div>
+  <div
+    class="col-12 to-be-printed"
+    [hidden]="!dashboardPresentationService.showInStep(6)"
+  >
+    <app-select-many-org-checkboxes></app-select-many-org-checkboxes>
+  </div>
+</div>

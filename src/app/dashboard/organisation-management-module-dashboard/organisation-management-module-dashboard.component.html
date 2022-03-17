@@ -1,0 +1,33 @@
+<div class="grid justify-content-center">
+  <div class="col-12">
+    <p-toolbar styleClass="p-mb-4" *ngIf="organisationManagementService.organisations$ | async as organisations">
+      <ng-template pTemplate="left">
+        <p-dropdown *ngIf="selectOrgMessage$ | async as selectOrgMessage" [options]="organisations"
+                    [placeholder]="selectOrgMessage"
+                    [filter]="true"
+                    (onChange)="selectOrganisation($event.value)" optionLabel="name"
+                    optionValue="organisationId">
+        </p-dropdown>
+      </ng-template>
+      <ng-template pTemplate="right">
+        <button
+          pButton
+          pRipple
+          label="Create Organisation"
+          icon="pi pi-plus"
+          (click)="openCreateOrgDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Delete organisation"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          (click)="openDeleteOrgDialog()"
+          [disabled]="(this.organisationManagementService.selectedOrganisation$ | async) === null"
+        ></button>
+      </ng-template>
+    </p-toolbar>
+    <app-assessor-management-module></app-assessor-management-module>
+  </div>
+</div>

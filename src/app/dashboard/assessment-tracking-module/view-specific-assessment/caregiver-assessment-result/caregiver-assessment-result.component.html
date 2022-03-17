@@ -1,0 +1,66 @@
+<div class="col-12" *ngIf="(assessmentTrackingService.denormalizedCaretakerAssessments$ | async) as assessment">
+  <p-card>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Caregiver Assessment Results</h2>
+      </div>
+      <div class="col-12">
+        <p-table
+          [value]="assessment"
+          [rows]="30"
+          [paginator]="true"
+          responsiveLayout="stack"
+          [rowHover]="true"
+          dataKey="assessment.caretakerResponse.responseId"
+          rowGroupMode="subheader"
+          groupRowsBy="caretaker.caretakerId"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [showCurrentPageReport]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>
+                Question Code
+              </th>
+              <th>
+                Question Title
+              </th>
+              <th>
+                Response Value
+              </th>
+              <th>
+                Response Notes
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="groupheader" let-assessment let-expanded="expanded">
+            <tr>
+              <td colspan="4">
+                <button type="button" pButton pRipple [pRowToggler]="assessment"
+                        class="p-button-text p-button-rounded p-button-plain p-mr-2"
+                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                <span class="p-text-bold p-ml-2">{{assessment.caretaker.name}}
+                  (ID: {{assessment.caretaker.caretakerUniqueId}}
+                  , Level of needs:&nbsp;{{ assessment.levelOfNeeds ? assessment.levelOfNeeds : 'Not Indicated' }}, Caretaker type:&nbsp;{{ assessment.caretakerType ? assessment.caretakerType : 'Not Indicated' }}</span>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="rowexpansion" let-assessment>
+            <tr>
+              <td>{{ assessment.caretakerResponse ? assessment.caretakerResponse.question.questionCode : 'No Responses Yet' }}</td>
+              <td>{{ assessment.caretakerResponse ? assessment.caretakerResponse.question.questionTitle : 'No Responses Yet' }}</td>
+              <td>{{ assessment.caretakerResponse ? assessment.caretakerResponse.responseValue : 'No Responses Yet' }}</td>
+              <td>{{ assessment.caretakerResponse ? assessment.caretakerResponse.responseNotes : 'No Responses Yet' }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              In total there are
+              {{ assessment ? assessment.length : 0 }} assessment responses.
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>

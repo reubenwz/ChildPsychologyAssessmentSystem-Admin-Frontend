@@ -1,0 +1,126 @@
+<p-card>
+  <div class="grid">
+    <div class="col-12">
+      <p-messages
+        [(value)]="messages"
+        [enableService]="false"
+      ></p-messages>
+      <p-messages *ngIf="topneedsService.errorMessage$ | async as errMsg">{{
+        errMsg
+      }}</p-messages>
+      <h1>Top Needs</h1>
+      <form [formGroup]="topneedsFormGroup" novalidate>
+        <div class="grid">
+          <!-- Start Date Input with p-calendar -->
+          <div class="lg:col-3 md:col-6 sm:col-12">
+            <div class="p-inputgroup p-fluid">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <span class="p-float-label">
+                <p-calendar
+                  inputId="startDate"
+                  formControlName="startDate"
+                  [maxDate]="topneedsFormGroup.get('endDate')?.value"
+                  dateFormat="dd/mm/yy"
+                  (onInput)="updateInformationSelection()"
+                  (onSelect)="updateInformationSelection()"
+                ></p-calendar>
+                <label for="startDate">Start Date</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish Start Date Input with p-calendar -->
+
+          <!-- End Date Input with p-calendar -->
+          <div class="lg:col-3 md:col-6 sm:col-12">
+            <div class="p-inputgroup p-fluid">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <span class="p-float-label">
+                <label for="endDate">End Date</label>
+                <p-calendar
+                  placeholder="End Date"
+                  inputId="endDate"
+                  formControlName="endDate"
+                  [minDate]="topneedsFormGroup.get('startDate')?.value"
+                  dateFormat="dd/mm/yy"
+                  (onInput)="updateInformationSelection()"
+                  (onSelect)="updateInformationSelection()"
+                ></p-calendar>
+                <label for="endDate">End Date</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish End Date Input with p-calendar -->
+
+          <!-- Age Group Input with p-dropdown -->
+          <div
+            class="lg:col-3 md:col-6 sm:col-12"
+            *ngIf="dashboardChartsService.ageGroups$ | async as ageGroups"
+          >
+            <div class="p-fluid">
+              <span class="p-float-label">
+                <p-dropdown
+                  placeholder="Age Group"
+                  inputId="ageGroup"
+                  [options]="ageGroups"
+                  formControlName="ageGroup"
+                  optionLabel="individualRange"
+                  optionValue="individualRangeCode"
+                  (onChange)="updateInformationSelection()"
+                >
+                </p-dropdown>
+                <label for="ageGroup">Age Group</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish Age Group Input with p-dropdown -->
+
+          <!-- Orgnaisations Input with p-treeSelect -->
+          <div class="col-12">
+            <div
+              *ngIf="topneedsService.treeSelectData | async as treeSelectData"
+            >
+              <div class="p-fluid">
+                <p-treeSelect
+                  [options]="treeSelectData"
+                  [(ngModel)]="selectedOrgs"
+                  (onNodeSelect)="logSelectedOrgs()"
+                  (onNodeUnselect)="logSelectedOrgs()"
+                  placeholder="Select Organisation(s)"
+                  selectionMode="checkbox"
+                  [ngModelOptions]="{ standalone: true }"
+                  scrollHeight="250px"
+                  display="chip"
+                ></p-treeSelect>
+              </div>
+            </div>
+          </div>
+          <!-- finish Orgnaisations Input with p-treeSelect -->
+        </div>
+      </form>
+
+      <div class="col-12">
+        <div
+          *ngIf="topneedsService.topneedsDisplayData$ | async as topneedsData"
+        >
+          <div
+            *ngIf="
+              topneedsService.topneedsBarChartOptions$
+                | async as topneedsOptions
+            "
+          >
+            <canvas
+              baseChart
+              [data]="topneedsData"
+              [labels]="selectedOrgs"
+              [options]="topneedsOptions"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

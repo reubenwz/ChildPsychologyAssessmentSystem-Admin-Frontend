@@ -1,0 +1,15 @@
+<div
+  *ngIf="
+    locDistBarchartService.locDistBarChartDisplayData$
+      | async as locDistBarChartDisplayData
+  "
+>
+  <div>
+    <h1>LOC Distribution</h1>
+  </div>
+  <div>
+    <app-select-many-org-checkboxes></app-select-many-org-checkboxes>
+    <!-- <canvas baseChart [data]="locDistBarChartDisplayData" [labels]="['0','1', '2', '3']" [type]="'bar'">
+        </canvas> -->
+  </div>
+</div>

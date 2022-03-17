@@ -1,0 +1,88 @@
+<p-card>
+  <div class="grid">
+    <div class="col-12">
+      <p-messages
+        [(value)]="messages"
+        [enableService]="false"
+      ></p-messages>
+      <p-messages
+        *ngIf="traumapercentageService.errorMessage$ | async as errMsg"
+        >{{ errMsg }}</p-messages
+      >
+      <h1>Trauma Percentage</h1>
+      <form [formGroup]="traumapercentageFormGroup" novalidate>
+        <div class="grid">
+          <!-- Age Group Input with p-dropdown -->
+          <div
+            class="lg:col-3 md:col-6 sm:col-12"
+            *ngIf="dashboardChartsService.ageGroups$ | async as ageGroups"
+          >
+            <div class="p-fluid">
+              <span class="p-float-label">
+                <p-dropdown
+                  placeholder="Age Group"
+                  inputId="ageGroup"
+                  [options]="ageGroups"
+                  formControlName="ageGroup"
+                  optionLabel="individualRange"
+                  optionValue="individualRangeCode"
+                  (onChange)="updateInformationSelection()"
+                >
+                </p-dropdown>
+                <label for="ageGroup">Age Group</label>
+              </span>
+            </div>
+          </div>
+          <!-- finish Age Group Input with p-dropdown -->
+
+          <!-- Orgnaisations Input with p-treeSelect -->
+          <div class="col-12">
+            <div
+              *ngIf="
+                traumapercentageService.treeSelectData | async as treeSelectData
+              "
+            >
+              <div class="p-fluid">
+                <p-treeSelect
+                  [options]="treeSelectData"
+                  [(ngModel)]="selectedOrgs"
+                  (onNodeSelect)="logSelectedOrgs()"
+                  (onNodeUnselect)="logSelectedOrgs()"
+                  placeholder="Select Organisation(s)"
+                  selectionMode="checkbox"
+                  [ngModelOptions]="{ standalone: true }"
+                  scrollHeight="250px"
+                  display="chip"
+                ></p-treeSelect>
+              </div>
+            </div>
+          </div>
+          <!-- finish Orgnaisations Input with p-treeSelect -->
+        </div>
+      </form>
+
+      <div class="col-12">
+        <div
+          *ngIf="
+            traumapercentageService.traumapercentageDisplayData$
+              | async as traumapercentageData
+          "
+        >
+          <div
+            *ngIf="
+              traumapercentageService.traumapercentageBarChartOptions$
+                | async as traumapercentageOptions
+            "
+          >
+            <canvas
+              baseChart
+              [data]="traumapercentageData"
+              [labels]="selectedOrgs"
+              [options]="traumapercentageOptions"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

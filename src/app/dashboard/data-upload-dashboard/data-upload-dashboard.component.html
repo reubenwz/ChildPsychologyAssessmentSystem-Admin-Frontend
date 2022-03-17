@@ -1,0 +1,112 @@
+<div class="grid justify-content-center">
+  <div
+    class="
+      lg:col-10
+      md:col-12
+      sm:col-offset-0 sm:col-12
+    ">
+    <div class="card">
+      <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="right">
+          <div
+            *ngIf="{isProcessing: !!(applicationStateService.isProcessing$ | async)} as scope">
+            <p-progressBar *ngIf="scope.isProcessing" mode="indeterminate"></p-progressBar>
+            <p-fileUpload
+              #fileUpload
+              mode="basic"
+              name="upload-file"
+              accept=".xlsx, application/msexcel"
+              [maxFileSize]="2000000"
+              chooseLabel="Import"
+              [disabled]="scope.isProcessing"
+              [customUpload]="true"
+              (uploadHandler)="dataUploadService.uploadFile($event, fileUpload)"
+            ></p-fileUpload>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <div *ngIf="(dataUploadService.existingUploads$ | async) as existingUploads">
+        <p-table
+          [value]="existingUploads.uploads"
+          [rows]="existingUploads.per_page"
+          [paginator]="false"
+          responsiveLayout="scroll"
+          [(selection)]="dataUploadService.selectedUploads"
+          [rowHover]="true"
+          dataKey="docId"
+          [showCurrentPageReport]="true"
+        >
+          <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              <h5 class="p-m-0">Manage Uploads</h5>
+              <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (click)="openSearchModal()"
+                [readOnly]="true"
+                placeholder="Search..."
+              />
+            </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>
+                Date and Time
+              </th>
+              <th>
+                Uploaded By
+              </th>
+              <th>
+                Changes to Database
+              </th>
+              <th>Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+              </td>
+              <td>{{rowData.uploadDate | date}}</td>
+              <td>{{rowData.admin.name}}</td>
+              <td>
+                <p-messages [severity]="rowData.success ? 'success' : 'error'">
+                  <ng-template pTemplate>
+                    <span class="doc-details">{{rowData.docDetails}}</span>
+                  </ng-template>
+                </p-messages>
+              </td>
+              <td>
+                <a [href]="rowData.url" download="download.xlsx"
+                   pButton
+                   pRipple
+                   label="Download"
+                   icon="pi pi-upload"
+                   class="p-button-help p-button-rounded"
+                ></a>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              In total there
+              are {{ existingUploads.total_records ? existingUploads.total_records : 0 }}
+              uploads.
+            </div>
+          </ng-template>
+        </p-table>
+        <p-paginator [rows]="30"
+                     (onPageChange)="dataUploadService.loadMoreData($event)"
+                     [totalRecords]="existingUploads.total_records">
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</div>

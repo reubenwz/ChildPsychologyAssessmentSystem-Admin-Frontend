@@ -1,0 +1,50 @@
+<div class="grid">
+  <div class="col-12" *ngIf="createDomainForm$ | async as createDomainForm">
+    <form [formGroup]="createDomainForm" (submit)="createDomain()">
+      <div class="p-datatable-gridlines p-datatable p-component p-datatable-responsive-scroll">
+        <table role="table" class="p-datatable-table ng-star-inserted">
+          <tbody class="p-element p-datatable-tbody">
+          <tr class="ng-star-inserted">
+            <td>Name</td>
+            <td class="p-fluid">
+              <input pInputText formControlName="domainName"/>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Description</td>
+            <td class="p-fluid">
+              <ng-container formArrayName="domainDescription">
+                <div class="p-inputgroup" *ngFor="let _ of domainDescription.controls; index as i">
+                  <button pButton type="button" icon="pi pi-minus"
+                          class="p-inputgroup-addon p-button-outlined p-button-danger"
+                          (click)="removeDomainDescription(i)"></button>
+                  <textarea pInputTextarea [formControlName]="i"></textarea>
+                  <button pButton type="button" icon="pi pi-plus" class="p-inputgroup-addon p-button-outlined"
+                          (click)="addDomainDescription()"></button>
+                </div>
+              </ng-container>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Is Module</td>
+            <td class="p-fluid">
+              <p-checkbox [formControl]="$any(createDomainForm).controls['module']" [binary]="true"></p-checkbox>
+            </td>
+          </tr>
+          <tr class="ng-star-inserted">
+            <td>Is Caregiver Domain</td>
+            <td class="p-fluid">
+              <p-checkbox [formControl]="$any(createDomainForm).controls['caregiverDomain']"
+                          [binary]="true"></p-checkbox>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="p-datatable-footer ng-star-inserted">
+          <button pButton label="Create Domain" type="submit"
+                  [disabled]="createDomainForm.invalid || (applicationStateService.isProcessing$ | async)"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

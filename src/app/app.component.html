@@ -1,0 +1,10 @@
+<app-header *ngIf="(this.adminStateService.loggedInUser$ | async) === null"></app-header>
+<app-application-state-toast></app-application-state-toast>
+<div id="main-container">
+  <app-navbar></app-navbar>
+  <div id="main-content" [ngClass]="{ expanded: navbarService.visible }">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<app-footer></app-footer>
+

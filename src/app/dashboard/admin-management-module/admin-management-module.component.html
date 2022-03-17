@@ -1,0 +1,89 @@
+<div class="grid justify-content-center">
+  <div class="col-12">
+    <div class="card" *ngIf="(adminUserService.existingAdminUsers$ | async) as existingAdmins">
+      <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+          <button
+            pButton
+            pRipple
+            label="Create"
+            icon="pi pi-plus"
+            class="orange-button"
+            (click)="openCreateAdminDialog()"
+          ></button>
+        </ng-template>
+      </p-toolbar>
+      <p-table
+        [value]="existingAdmins"
+        [rows]="30"
+        [paginator]="true"
+        responsiveLayout="scroll"
+        [rowHover]="true"
+        dataKey="adminId"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="email">
+              Email
+              <p-sortIcon field="email"></p-sortIcon>
+            </th>
+            <th pSortableColumn="name">
+              Name
+              <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="gender">
+              Gender
+              <p-sortIcon field="gender"></p-sortIcon>
+            </th>
+            <th pSortableColumn="dob">
+              Date of Birth
+              <p-sortIcon field="dob"></p-sortIcon>
+            </th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="email"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="name"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="gender"></p-columnFilter>
+            </th>
+            <th></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-admin>
+          <tr>
+            <td>{{ admin.email }}</td>
+            <td>{{ admin.name }}</td>
+            <td>{{ admin.gender }}</td>
+            <td>{{ admin.dob | date }}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                label="Delete Admin"
+                icon="pi pi-trash"
+                class="p-button-danger p-button-rounded"
+                *ngIf="!admin.root"
+                (click)="openDeleteDialog(admin)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            In total there
+            are {{ existingAdmins.length }}
+            admins.
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

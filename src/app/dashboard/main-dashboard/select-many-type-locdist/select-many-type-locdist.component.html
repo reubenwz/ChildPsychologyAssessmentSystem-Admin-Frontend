@@ -1,0 +1,39 @@
+<p-card>
+  <div class="grid">
+    <div class="col-12">
+      <h1>LOC Distribution By Organisation Types</h1>
+    </div>
+    <div class="col-12">
+      <div
+        *ngIf="
+          dashboardChartsService.organisationTypes$ | async as organisationTypes
+        "
+      >
+        <div class="p-fluid">
+          <p-multiSelect
+            [(ngModel)]="selectedTypes"
+            (ngModelChange)="logSelectedTypes()"
+            [options]="organisationTypes"
+            [options]="organisationTypes"
+            optionLabel="name"
+            optionValue="nameCode"
+          ></p-multiSelect>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div
+        *ngIf="
+          manyTypesService.selectManyTypesDisplayData$ | async as manyTypeData
+        "
+      >
+        <canvas
+          baseChart
+          [data]="manyTypeData"
+          [labels]="selectedTypes"
+          [options]="lineChartOptions"
+        ></canvas>
+      </div>
+    </div>
+  </div>
+</p-card>

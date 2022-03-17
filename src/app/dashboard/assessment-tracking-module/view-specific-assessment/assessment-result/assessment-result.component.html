@@ -1,0 +1,70 @@
+<div class="col-12" *ngIf="(assessmentTrackingService.specificAssessment$ | async) as assessment">
+  <p-card>
+    <div class="grid">
+      <div class="col-12">
+        <h2>Assessment Results</h2>
+      </div>
+      <div class="col-12">
+        <p-table
+          [value]="assessment.response"
+          [rows]="30"
+          [paginator]="true"
+          responsiveLayout="stack"
+          [rowHover]="true"
+          dataKey="responseId"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [showCurrentPageReport]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="question.questionCode">
+                Question Code
+                <p-sortIcon field="question.questionCode"></p-sortIcon>
+              </th>
+              <th pSortableColumn="question.questionTitle">
+                Question Title
+                <p-sortIcon field="question.questionTitle"></p-sortIcon>
+              </th>
+              <th pSortableColumn="responseValue">
+                Response Value
+                <p-sortIcon field="responseValue"></p-sortIcon>
+              </th>
+              <th pSortableColumn="responseNotes">
+                Response Notes
+                <p-sortIcon field="responseNotes"></p-sortIcon>
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <p-columnFilter type="text" field="question.questionCode"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="question.questionTitle"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="responseValue"></p-columnFilter>
+              </th>
+              <th>
+                <p-columnFilter type="text" field="responseNotes"></p-columnFilter>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-assessmentResponse>
+            <tr>
+              <td>{{ assessmentResponse.question.questionCode }}</td>
+              <td>{{ assessmentResponse.question.questionTitle }}</td>
+              <td>{{ assessmentResponse.responseValue }}</td>
+              <td>{{ assessmentResponse.responseNotes }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              In total there are
+              {{ assessment.response ? assessment.response.length : 0 }} assessment responses.
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-card>
+</div>
