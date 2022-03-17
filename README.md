@@ -1,4 +1,4 @@
-# Cans Admin Frontend
+# Child Psychology Assessment System Admin Frontend
 
 The code is structured in the following manner:
 ```
